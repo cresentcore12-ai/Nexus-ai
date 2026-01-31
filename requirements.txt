@@ -1,0 +1,35 @@
+# Nexus AI Ultimate - Revolutionary Edition
+# Made in Uttarakhand, India
+
+# Core Deep Learning
+torch>=2.1.0
+torchvision>=0.16.0
+transformers>=4.36.0
+diffusers>=0.25.0
+accelerate>=0.25.0
+
+# Advanced Features
+opencv-python>=4.8.0
+scikit-image>=0.21.0
+
+# Optimizations
+xformers>=0.0.23; sys_platform != 'darwin'
+safetensors>=0.4.0
+
+# Web Server
+flask>=3.0.0
+flask-cors>=4.0.0
+flask-socketio>=5.3.0
+python-socketio>=5.10.0
+
+# Image Processing
+pillow>=10.0.0
+numpy>=1.24.0
+
+# Utilities
+tqdm>=4.66.0
+requests>=2.31.0
+huggingface-hub>=0.19.0
+
+# Server
+waitress>=2.1.2

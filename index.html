@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI Ultimate - Revolutionary Edition</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            to { left: 100%; }
+        }
+        
+        h1 {
+            font-size: clamp(32px, 6vw, 56px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 14px;
+            color: #10b981;
+            margin: 0 8px;
+        }
+        
+        .coffee-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #FFDD00, #FBB034);
+            color: #000;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-top: 20px;
+            transition: transform 0.2s;
+            font-size: 16px;
+        }
+        
+        .coffee-btn:hover { transform: translateY(-2px); }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
+        }
+        
+        .feature-icon { font-size: 32px; margin-bottom: 12px; }
+        .feature-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6366f1;
+        }
+        
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 24px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        textarea, select {
+            width: 100%;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 14px;
+            margin: 12px 0;
+        }
+        
+        textarea { min-height: 120px; resize: vertical; }
+        
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Effects Grid */
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .effect-btn {
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .effect-btn:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+        
+        .effect-btn.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+        
+        /* Preview */
+        .preview {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preview img {
+            max-width: 100%;
+            max-height: 600px;
+            border-radius: 12px;
+        }
+        
+        .placeholder {
+            text-align: center;
+            color: #64748b;
+        }
+        
+        .placeholder-icon { font-size: 64px; margin-bottom: 16px; }
+        
+        /* Progress */
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        /* Status Badge */
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 12px 0;
+        }
+        
+        .status-online {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-offline {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ NEXUS AI ULTIMATE</h1>
+            <p class="subtitle">Revolutionary AI Media Generator with Breakthrough Features</p>
+            <div>
+                <span class="badge">🏔️ Made in Uttarakhand, India</span>
+                <span class="badge">🚀 Revolutionary Edition</span>
+            </div>
+            <br>
+            <a href="https://www.buymeacoffee.com/YOUR_USERNAME" class="coffee-btn" target="_blank">
+                ☕ Buy Me a Coffee
+            </a>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">AI Style Transfer</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <div class="feature-title">Smart Upscaling</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <div class="feature-title">Advanced Effects</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <div class="feature-title">Prompt AI</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Real-time Stream</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <div class="feature-title">Pro Quality</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <span class="status status-offline" id="statusBadge">🔴 Server Offline</span>
+        </div>
+        
+        <div class="main-grid">
+            <div>
+                <div class="card">
+                    <h2 class="card-title">✨ Ultimate Generation</h2>
+                    
+                    <label style="font-size: 14px; color: #94a3b8; display: block; margin-bottom: 8px;">
+                        Prompt (AI will enhance automatically)
+                    </label>
+                    <textarea id="prompt" placeholder="Describe your vision...">A majestic dragon flying over mountains at golden hour, epic fantasy scene</textarea>
+                    
+                    <label style="font-size: 14px; color: #94a3b8; display: block; margin-bottom: 8px;">
+                        Artistic Style
+                    </label>
+                    <select id="styleSelect">
+                        <option value="">No Style (Original)</option>
+                        <option value="oil_painting">🎨 Oil Painting</option>
+                        <option value="watercolor">💧 Watercolor</option>
+                        <option value="cyberpunk">⚡ Cyberpunk</option>
+                        <option value="vintage">📷 Vintage Film</option>
+                        <option value="anime">🎌 Anime Style</option>
+                    </select>
+                    
+                    <label style="font-size: 14px; color: #94a3b8; display: block; margin: 16px 0 8px;">
+                        Advanced Effects
+                    </label>
+                    <div class="effects-grid">
+                        <div class="effect-btn" onclick="toggleEffect('glow')">✨ Glow</div>
+                        <div class="effect-btn" onclick="toggleEffect('hdr')">📈 HDR</div>
+                        <div class="effect-btn" onclick="toggleEffect('cinematic')">🎬 Cinematic</div>
+                    </div>
+                    
+                    <label style="font-size: 14px; color: #94a3b8; display: block; margin: 16px 0 8px;">
+                        Upscale Factor
+                    </label>
+                    <select id="upscaleSelect">
+                        <option value="1">No Upscaling (1024px)</option>
+                        <option value="2">2x Upscale (2048px)</option>
+                        <option value="4">4x Upscale (4096px)</option>
+                    </select>
+                    
+                    <button class="btn" onclick="generateUltimate()" id="generateBtn">
+                        ⚡ GENERATE WITH ALL FEATURES
+                    </button>
+                </div>
+            </div>
+            
+            <div>
+                <div class="card">
+                    <h2 class="card-title">🎨 Live Preview</h2>
+                    
+                    <div class="preview" id="preview">
+                        <div class="placeholder">
+                            <div class="placeholder-icon">🎨</div>
+                            <p style="font-size: 16px; margin-bottom: 8px;">Your masterpiece will appear here</p>
+                            <p style="font-size: 13px;">Generation streams in real-time with all effects</p>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Preparing...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" style="text-align: center;">
+            <h3 style="color: #6366f1; margin-bottom: 16px;">💖 Support Revolutionary Development</h3>
+            <p style="color: #94a3b8; margin-bottom: 20px;">
+                Help us add more breakthrough features like video style transfer, 3D effects, and animation!
+            </p>
+            <a href="https://www.buymeacoffee.com/YOUR_USERNAME" class="coffee-btn" target="_blank">
+                ☕ Buy Me a Coffee
+            </a>
+            <p style="font-size: 14px; color: #64748b; margin-top: 24px;">
+                Made with ❤️ by sociaro.io@gmail.com | Instagram: @Cos.rn_xx | Twitter: @NahFel2n
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        const API = 'http://localhost:5000';
+        const socket = io(API);
+        const activeEffects = new Set();
+        
+        // Check server status
+        async function checkStatus() {
+            try {
+                const res = await fetch(`${API}/health`);
+                const data = await res.json();
+                document.getElementById('statusBadge').innerHTML = data.models_loaded 
+                    ? '🟢 Server Online • Models Ready'
+                    : '🟡 Server Online • Loading Models';
+                document.getElementById('statusBadge').className = 'status status-online';
+            } catch {
+                document.getElementById('statusBadge').innerHTML = '🔴 Server Offline • Run: python server.py --load-models';
+                document.getElementById('statusBadge').className = 'status status-offline';
+            }
+        }
+        
+        function toggleEffect(effect) {
+            const btn = event.target;
+            if (activeEffects.has(effect)) {
+                activeEffects.delete(effect);
+                btn.classList.remove('active');
+            } else {
+                activeEffects.add(effect);
+                btn.classList.add('active');
+            }
+        }
+        
+        async function generateUltimate() {
+            const btn = document.getElementById('generateBtn');
+            const preview = document.getElementById('preview');
+            const progress = document.getElementById('progressContainer');
+            
+            btn.disabled = true;
+            progress.style.display = 'block';
+            preview.innerHTML = '<div class="placeholder"><div class="placeholder-icon">⏳</div><p>Generating ultimate creation...</p></div>';
+            
+            const style = document.getElementById('styleSelect').value;
+            const effects = Array.from(activeEffects);
+            if (style) effects.push('style_transfer');
+            
+            try {
+                const res = await fetch(`${API}/api/generate/ultimate`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        prompt: document.getElementById('prompt').value,
+                        steps: 20,
+                        width: 1024,
+                        height: 1024,
+                        auto_enhance: true,
+                        style_type: style,
+                        effects: effects,
+                        upscale: parseInt(document.getElementById('upscaleSelect').value)
+                    })
+                });
+                
+                const data = await res.json();
+                if (data.success) {
+                    preview.innerHTML = `<img src="${data.image}" alt="Generated">`;
+                } else {
+                    preview.innerHTML = `<div class="placeholder"><p style="color: #ef4444;">❌ ${data.error}</p></div>`;
+                }
+            } catch (error) {
+                preview.innerHTML = `<div class="placeholder"><p style="color: #ef4444;">❌ ${error.message}</p></div>`;
+            } finally {
+                btn.disabled = false;
+                progress.style.display = 'none';
+            }
+        }
+        
+        // Socket events
+        socket.on('generation_progress', (data) => {
+            document.getElementById('progressFill').style.width = data.progress + '%';
+            document.getElementById('progressText').textContent = `Step ${data.step} - ${Math.round(data.progress)}%`;
+        });
+        
+        socket.on('effect_applied', (data) => {
+            document.getElementById('progressText').textContent = `Applied ${data.effect} effect...`;
+        });
+        
+        socket.on('upscale_complete', (data) => {
+            document.getElementById('progressText').textContent = `Upscaled ${data.scale}x!`;
+        });
+        
+        checkStatus();
+        setInterval(checkStatus, 5000);
+    </script>
+</body>
+</html>
